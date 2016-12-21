@@ -27,7 +27,7 @@ RUN curl -O https://bootstrap.pypa.io/get-pip.py && \
 RUN pip3 install \
         numpy
 
-ENV TENSORFLOW_VERSION 0.11.0
+ENV TENSORFLOW_VERSION 0.12.0
 
 # --- DO NOT EDIT OR DELETE BETWEEN THE LINES --- #
 # These lines will be edited automatically by parameterized_docker_build.sh. #

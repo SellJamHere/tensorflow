@@ -78,20 +78,6 @@ Returns the dtype correspond to this dtype's real part.
 
 - - -
 
-#### `tf.DType.is_ref_dtype` {#DType.is_ref_dtype}
-
-Returns `True` if this `DType` represents a reference type.
-
-
-- - -
-
-#### `tf.DType.as_ref` {#DType.as_ref}
-
-Returns a reference `DType` based on this `DType`.
-
-
-- - -
-
 #### `tf.DType.is_floating` {#DType.is_floating}
 
 Returns whether this is a (non-quantized, real) floating point type.
@@ -145,6 +131,23 @@ Returns a `numpy.dtype` based on this `DType`.
 #### `tf.DType.as_datatype_enum` {#DType.as_datatype_enum}
 
 Returns a `types_pb2.DataType` enum value based on this `DType`.
+
+
+
+- - -
+
+#### `tf.DType.limits` {#DType.limits}
+
+Return intensity limits, i.e. (min, max) tuple, of the dtype.
+
+##### Args:
+
+  clip_negative : bool, optional
+      If True, clip the negative range (i.e. return 0 for min intensity)
+      even if the image dtype allows negative values.
+Returns
+  min, max : tuple
+    Lower and upper intensity limits.
 
 
 

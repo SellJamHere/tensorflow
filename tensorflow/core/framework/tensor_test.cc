@@ -349,6 +349,15 @@ TEST(Tensor_Float, Reshape) {
 
 TEST(Tensor_Scalar, Basics) {
   {
+    Tensor t(DT_BOOL, TensorShape({}));
+    EXPECT_EQ(1, t.NumElements());
+    auto Tt = t.scalar<bool>();
+    EXPECT_EQ(1, Tt.size());
+    EXPECT_EQ(0, Tt.rank());
+    t.scalar<bool>()() = true;
+    EXPECT_TRUE(Tt());
+  }
+  {
     Tensor t(DT_FLOAT, TensorShape({}));
     EXPECT_EQ(1, t.NumElements());
     auto Tt = t.scalar<float>();
@@ -825,20 +834,24 @@ TEST(SummarizeValue, INT32) {
   Tensor x = MkTensor<int>(DT_INT32, TensorShape({5}), {1, 2, 3, 4, 0});
   EXPECT_EQ("1 2 3 4 0", x.SummarizeValue(16));
   x = MkTensor<int>(DT_INT32, TensorShape({2, 2}), {1, 2, 3, 4, 0});
-  EXPECT_EQ("1 2 3 4", x.SummarizeValue(16));
+  EXPECT_EQ("[1 2][3 4]", x.SummarizeValue(16));
   x = MkTensor<int>(DT_INT32, TensorShape({2, 2, 1, 1}), {1, 2, 3, 4, 0});
-  EXPECT_EQ("1 2 3 4", x.SummarizeValue(16));
-  EXPECT_EQ("1 2 3...", x.SummarizeValue(3));
+  EXPECT_EQ("[[[1]][[2]]][[[3]][[4]]]", x.SummarizeValue(16));
+  EXPECT_EQ("[[[1]][[2]]][[[3]]]...", x.SummarizeValue(3));
+  x = MkTensor<int>(DT_INT32, TensorShape({0}), {});
+  EXPECT_EQ("", x.SummarizeValue(16));
 }
 
 TEST(SummarizeValue, FLOAT) {
   Tensor x = MkTensor<float>(DT_FLOAT, TensorShape({5}), {1, 2, 3, 4, 0});
   EXPECT_EQ("1 2 3 4 0", x.SummarizeValue(16));
   x = MkTensor<float>(DT_FLOAT, TensorShape({2, 2}), {1, 2, 3, 4, 0});
-  EXPECT_EQ("1 2 3 4", x.SummarizeValue(16));
+  EXPECT_EQ("[1 2][3 4]", x.SummarizeValue(16));
   x = MkTensor<float>(DT_FLOAT, TensorShape({2, 2, 1, 1}), {1, 2, 3, 4, 0});
-  EXPECT_EQ("1 2 3 4", x.SummarizeValue(16));
-  EXPECT_EQ("1 2 3...", x.SummarizeValue(3));
+  EXPECT_EQ("[[[1]][[2]]][[[3]][[4]]]", x.SummarizeValue(16));
+  EXPECT_EQ("[[[1]][[2]]][[[3]]]...", x.SummarizeValue(3));
+  x = MkTensor<float>(DT_FLOAT, TensorShape({0}), {});
+  EXPECT_EQ("", x.SummarizeValue(16));
 }
 
 TEST(SummarizeValue, BOOL) {

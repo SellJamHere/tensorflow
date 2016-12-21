@@ -140,6 +140,8 @@ class Beta(distribution.Distribution):
     ```
 
     """
+    parameters = locals()
+    parameters.pop("self")
     with ops.name_scope(name, values=[a, b]) as ns:
       with ops.control_dependencies([
           check_ops.assert_positive(a),
@@ -150,14 +152,15 @@ class Beta(distribution.Distribution):
         contrib_tensor_util.assert_same_float_dtype((self._a, self._b))
         # Used for mean/mode/variance/entropy/sampling computations
         self._a_b_sum = self._a + self._b
-        super(Beta, self).__init__(
-            dtype=self._a_b_sum.dtype,
-            parameters={"a": self._a, "b": self._b, "a_b_sum": self._a_b_sum},
-            validate_args=validate_args,
-            allow_nan_stats=allow_nan_stats,
-            is_continuous=True,
-            is_reparameterized=False,
-            name=ns)
+    super(Beta, self).__init__(
+        dtype=self._a_b_sum.dtype,
+        validate_args=validate_args,
+        allow_nan_stats=allow_nan_stats,
+        is_continuous=True,
+        is_reparameterized=False,
+        parameters=parameters,
+        graph_parents=[self._a, self._b, self._a_b_sum],
+        name=ns)
 
   @staticmethod
   def _param_shapes(sample_shape):
@@ -287,6 +290,8 @@ class BetaWithSoftplusAB(Beta):
                validate_args=False,
                allow_nan_stats=True,
                name="BetaWithSoftplusAB"):
+    parameters = locals()
+    parameters.pop("self")
     with ops.name_scope(name, values=[a, b]) as ns:
       super(BetaWithSoftplusAB, self).__init__(
           a=nn.softplus(a),
@@ -294,8 +299,10 @@ class BetaWithSoftplusAB(Beta):
           validate_args=validate_args,
           allow_nan_stats=allow_nan_stats,
           name=ns)
+    self._parameters = parameters
 
 
+@kullback_leibler.RegisterKL(Beta, Beta)
 def _kl_beta_beta(d1, d2, name=None):
   """Calculate the batched KL divergence KL(d1 || d2) with d1 and d2 Beta.
 
@@ -319,14 +326,3 @@ def _kl_beta_beta(d1, d2, name=None):
               + (d1.b - d2.b)*math_ops.digamma(d1.b)
               + (d2.a_b_sum - d1.a_b_sum)*math_ops.digamma(d1.a_b_sum))
     return log_betas + digammas
-
-
-# Register KL divergences.
-kl_classes = [
-    Beta,
-    BetaWithSoftplusAB,
-]
-
-for beta_aa in kl_classes:
-  for beta_bb in kl_classes:
-    kullback_leibler.RegisterKL(beta_aa, beta_bb)(_kl_beta_beta)

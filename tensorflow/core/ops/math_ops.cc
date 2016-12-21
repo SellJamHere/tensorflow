@@ -217,17 +217,23 @@ Computes numerical negative value element-wise.
 I.e., \\(y = -x\\).
 )doc");
 
-REGISTER_OP("Inv").UNARY().Doc(R"doc(
+REGISTER_OP("Inv")
+    .UNARY()
+    .Doc(R"doc(
 Computes the reciprocal of x element-wise.
 I.e., \\(y = 1 / x\\).
-)doc");
+)doc")
+    .Deprecated(17, "Use Reciprocal");
 
-REGISTER_OP("InvGrad").UNARY_GRADIENT_COMPLEX().Doc(R"doc(
+REGISTER_OP("InvGrad")
+    .UNARY_GRADIENT_COMPLEX()
+    .Doc(R"doc(
 Computes the gradient for the inverse of `x` wrt its input.
 
 Specifically, `grad = -dy * y*y`, where `y = 1/x`, and `dy`
 is the corresponding input gradient.
-)doc");
+)doc")
+    .Deprecated(17, "Use ReciprocalGrad");
 
 REGISTER_OP("Reciprocal").UNARY().Doc(R"doc(
 Computes the reciprocal of x element-wise.
@@ -294,6 +300,13 @@ REGISTER_OP("Log")
     .Doc(R"doc(
 Computes natural logarithm of x element-wise.
 I.e., \\(y = \log_e x\\).
+)doc");
+
+REGISTER_OP("Log1p")
+    .UNARY_COMPLEX()
+    .Doc(R"doc(
+Computes natural logarithm of (1 + x) element-wise.
+I.e., \\(y = \log_e (1 + x)\\).
 )doc");
 
 REGISTER_OP("Tanh")
@@ -396,6 +409,10 @@ REGISTER_OP("IsNan")
     .SetShapeFn(shape_inference::UnchangedShape)
     .Doc(R"doc(
 Returns which elements of x are NaN.
+
+@compatibility(numpy)
+Equivalent to np.isnan
+@end_compatibility
 )doc");
 
 REGISTER_OP("IsInf")
@@ -405,6 +422,10 @@ REGISTER_OP("IsInf")
     .SetShapeFn(shape_inference::UnchangedShape)
     .Doc(R"doc(
 Returns which elements of x are Inf.
+
+@compatibility(numpy)
+Equivalent to np.isinf
+@end_compatibility
 )doc");
 
 REGISTER_OP("IsFinite")
@@ -414,6 +435,10 @@ REGISTER_OP("IsFinite")
     .SetShapeFn(shape_inference::UnchangedShape)
     .Doc(R"doc(
 Returns which elements of x are finite.
+
+@compatibility(numpy)
+Equivalent to np.isfinite
+@end_compatibility
 )doc");
 
 REGISTER_OP("Sign")
@@ -445,6 +470,25 @@ REGISTER_OP("Ceil")
     .SetShapeFn(shape_inference::UnchangedShape)
     .Doc(R"doc(
 Returns element-wise smallest integer in not less than x.
+)doc");
+
+REGISTER_OP("Rint")
+    .Input("x: T")
+    .Output("y: T")
+    .Attr("T: {float, double}")
+    .SetShapeFn(shape_inference::UnchangedShape)
+    .Doc(R"doc(
+Returns element-wise integer closest to x.
+
+If the result is midway between two representable values,
+the even representable is chosen.
+For example:
+
+```
+rint(-1.5) ==> -2.0
+rint(0.5000001) ==> 1.0
+rint([-1.7, -1.5, -0.2, 0.2, 1.5, 1.7, 2.0]) ==> [-2., -2., -0., 0., 2., 2., 2.]
+```
 )doc");
 
 // Declares cwise binary operations signature: 't, 't -> 't.
@@ -504,6 +548,43 @@ Returns x / y element-wise.
 [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
 )doc");
 
+REGISTER_OP("FloorDiv")
+    .BINARY_MORE()
+    .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
+    .Doc(R"doc(
+Returns x // y element-wise.
+
+*NOTE*: `FloorDiv` supports broadcasting. More about broadcasting
+[here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+)doc");
+
+REGISTER_OP("TruncateDiv")
+    .BINARY_MORE()
+    .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
+    .Doc(R"doc(
+Returns x / y element-wise for integer types.
+
+Truncation designates that negative numbers will round fractional quantities
+toward zero. I.e. -7 / 5 = 1. This matches C semantics but it is different
+than Python semantics. See `FloorDiv` for a division function that matches
+Python Semantics.
+
+*NOTE*: `TruncateDiv` supports broadcasting. More about broadcasting
+[here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+)doc");
+
+REGISTER_OP("RealDiv")
+    .BINARY_MORE()
+    .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
+    .Doc(R"doc(
+Returns x / y element-wise for real types.
+
+If `x` and `y` are reals, this will return the floating-point division.
+
+*NOTE*: `Div` supports broadcasting. More about broadcasting
+[here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+)doc");
+
 REGISTER_OP("SquaredDifference")
     .BINARY_FEWER()
     .SetIsCommutative()
@@ -554,6 +635,37 @@ REGISTER_OP("Mod")
     .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
     .Doc(R"doc(
 Returns element-wise remainder of division.
+
+*NOTE*: `Mod` supports broadcasting. More about broadcasting
+[here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+)doc");
+
+REGISTER_OP("FloorMod")
+    .Input("x: T")
+    .Input("y: T")
+    .Output("z: T")
+    .Attr("T: {int32, int64, float, double}")
+    .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
+    .Doc(R"doc(
+Returns element-wise remainder of division. When `x < 0` xor `y < 0` is
+true, this follows Python semantics in that the result here is consistent
+with a flooring divide. E.g. `floor(x / y) * y + mod(x, y) = x`.
+
+*NOTE*: `FloorMod` supports broadcasting. More about broadcasting
+[here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
+)doc");
+
+REGISTER_OP("TruncateMod")
+    .Input("x: T")
+    .Input("y: T")
+    .Output("z: T")
+    .Attr("T: {int32, int64, float, double}")
+    .SetShapeFn(shape_inference::BroadcastBinaryOpShapeFn)
+    .Doc(R"doc(
+Returns element-wise remainder of division. This emulates C semantics where
+
+true, this follows C semantics in that the result here is consistent
+with a flooring divide. E.g. `floor(x / y) * y + mod(x, y) = x`.
 
 *NOTE*: `Mod` supports broadcasting. More about broadcasting
 [here](http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html)
@@ -843,9 +955,23 @@ REGISTER_OP("Select")
     .Output("output: T")
     .Attr("T: type")
     .SetShapeFn([](InferenceContext* c) {
+      // Merge handle shape and dtype if applicable.
+      if (c->input_handle_dtype(1) != c->input_handle_dtype(2)) {
+        // TODO(apassos) resolve this in the manner of b/32476923
+        return errors::InvalidArgument(
+            "Trying to merge handles pointing to different dtypes.");
+      }
+      c->set_output_handle_dtype(0, c->input_handle_dtype(1));
+      ShapeHandle output_handle_shape;
+      TF_RETURN_IF_ERROR(c->Merge(c->input_handle_shape(1),
+                                  c->input_handle_shape(2),
+                                  &output_handle_shape));
+      c->set_output_handle_shape(0, output_handle_shape);
+
       // The inputs 'then' and 'else' must have the same shape.
       ShapeHandle data = c->input(1);
-      TF_RETURN_IF_ERROR(c->Merge(data, c->input(2), &data));
+      ShapeHandle other = c->input(2);
+      TF_RETURN_IF_ERROR(c->Merge(data, other, &data));
 
       // The input 'cond' must either have the same shape as 'then' and
       // 'else', or be a vector if 'then' and 'else' are at least vectors.
@@ -861,30 +987,50 @@ REGISTER_OP("Select")
       const int32 cond_rank = c->Rank(cond);
       const int32 data_rank = c->Rank(data);
 
-      if (cond_rank != 1) {
-        // If the rank of 'cond' is != 1, the shape must match 'then' and 'else'
-        TF_RETURN_IF_ERROR(c->Merge(data, cond, &data));
+      if (cond_rank == 0){
+        // The rank of 'cond' is a scalar.
+        // t and e can have any shape.
+        c->set_output(0, data);
+        return Status::OK();
       }
-      if (data_rank != 0) {
-        // If then and else are not scalars, then cond must be at least
-        // a vector, and its first value must match that of 'else'
-        TF_RETURN_IF_ERROR(c->WithRankAtLeast(cond, 1, &cond));
-        if (cond_rank == 1) {
-          TF_RETURN_IF_ERROR(c->Merge(cond, c->Vector(c->Dim(data, 0)), &cond));
-        }
+
+      if (cond_rank != 1) {
+        // If 'cond' is not a vector, and not a scalar,
+        // then shape must match 'then' and 'else'
+        TF_RETURN_IF_ERROR(c->Merge(data, cond, &data));
+        c->set_output(0, data);
+        return Status::OK();
+      }
+
+      if (data_rank == 0) {
+        // if 'then' and 'else' are scalar also the cond must be
+        TF_RETURN_IF_ERROR(c->Merge(data, cond, &data));
+        c->set_output(0, data);
+        return Status::OK();
+      }
+
+      if (cond_rank == 1) {
+        // if the cond is a vector and the 'then' is not a scalar,
+        // the first dimension of 'then' and 'else'
+        TF_RETURN_IF_ERROR(c->Merge(cond, c->Vector(c->Dim(data, 0)), &cond));
+        c->set_output(0, data);
+        return Status::OK();
       }
 
       c->set_output(0, data);
+
       return Status::OK();
     })
     .Doc(R"doc(
 Selects elements from `t` or `e`, depending on `condition`.
 
-The `t`, and `e` tensors must all have the same shape,
-and the output will also have that shape.  The `condition` tensor
-must be a scalar if `t` and `e` are scalars.  If `t` and `e` are vectors
-or higher rank, then `condition` must be either a vector with size
-matching the first dimension of `t`, or must have the same shape as `t`.
+The `t`, and `e` tensors must all have the same shape, and the
+output will also have that shape.
+
+The `condition` tensor must be a scalar if `t` and `e` are scalars.
+If `t` and `e` are vectors or higher rank, then `condition` must be either a
+scalar, a vector with size matching the first dimension of `t`, or must have
+the same shape as `t`.
 
 The `condition` tensor acts as a mask that chooses, based on the value at each
 element, whether the corresponding element / row in the output should be
@@ -1921,6 +2067,10 @@ Compute the 2-dimensional discrete Fourier Transform over the inner-most
 input: A complex64 tensor.
 output: A complex64 tensor of the same shape as `input`. The inner-most 2
   dimensions of `input` are replaced with their 2D Fourier Transform.
+
+@compatibility(numpy)
+Equivalent to np.fft2
+@end_compatibility
 )doc");
 
 REGISTER_OP("IFFT2D")
@@ -1936,6 +2086,10 @@ Compute the inverse 2-dimensional discrete Fourier Transform over the inner-most
 input: A complex64 tensor.
 output: A complex64 tensor of the same shape as `input`. The inner-most 2
   dimensions of `input` are replaced with their inverse 2D Fourier Transform.
+
+@compatibility(numpy)
+Equivalent to np.ifft2
+@end_compatibility
 )doc");
 
 REGISTER_OP("FFT3D")
@@ -1951,6 +2105,10 @@ dimensions of `input`.
 input: A complex64 tensor.
 output: A complex64 tensor of the same shape as `input`. The inner-most 3
   dimensions of `input` are replaced with their 3D Fourier Transform.
+
+@compatibility(numpy)
+Equivalent to np.fft3
+@end_compatibility
 )doc");
 
 REGISTER_OP("IFFT3D")
@@ -1966,6 +2124,10 @@ Compute the inverse 3-dimensional discrete Fourier Transform over the inner-most
 input: A complex64 tensor.
 output: A complex64 tensor of the same shape as `input`. The inner-most 3
   dimensions of `input` are replaced with their inverse 3D Fourier Transform.
+
+@compatibility(numpy)
+Equivalent to np.fft3
+@end_compatibility
 )doc");
 
 // --------------------------------------------------------------------------
@@ -2165,6 +2327,77 @@ Tinput: The type of the input.
 output_min: The float value that the minimum quantized output value represents.
 output_max: The float value that the maximum quantized output value represents.
 out_type: The type of the output. Should be a lower bit depth than Tinput.
+
+)doc");
+
+REGISTER_OP("Requantize")
+    .Input("input: Tinput")
+    .Input("input_min: float")
+    .Input("input_max: float")
+    .Input("requested_output_min: float")
+    .Input("requested_output_max: float")
+    .Output("output: out_type")
+    .Output("output_min: float")
+    .Output("output_max: float")
+    .Attr("Tinput: quantizedtype")
+    .Attr("out_type: quantizedtype")
+    .SetShapeFn([](InferenceContext* c) {
+      TF_RETURN_IF_ERROR(shape_inference::UnchangedShape(c));
+      ShapeHandle unused;
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(1), 0, &unused));
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(2), 0, &unused));
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(3), 0, &unused));
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(4), 0, &unused));
+      c->set_output(1, c->Scalar());
+      c->set_output(2, c->Scalar());
+      return Status::OK();
+    })
+    .Doc(R"doc(
+Convert the quantized 'input' tensor into a lower-precision 'output', using the
+output range specified with 'requested_output_min' and 'requested_output_max'.
+
+[input_min, input_max] are scalar floats that specify the range for the float
+interpretation of the 'input' data. For example, if input_min is -1.0f and
+input_max is 1.0f, and we are dealing with quint16 quantized data, then a 0
+value in the 16-bit data should be interpreted as -1.0f, and a 65535 means 1.0f.
+
+input_min: The float value that the minimum quantized input value represents.
+input_max: The float value that the maximum quantized input value represents.
+Tinput: The type of the input.
+requested_output_min: The float value that the minimum quantized output value represents.
+requested_output_max: The float value that the maximum quantized output value represents.
+output_min: The requested_output_min value is copied into this output.
+output_max: The requested_output_max value is copied into this output.
+out_type: The type of the output. Should be a lower bit depth than Tinput.
+
+)doc");
+
+REGISTER_OP("RequantizationRange")
+    .Input("input: Tinput")
+    .Input("input_min: float")
+    .Input("input_max: float")
+    .Output("output_min: float")
+    .Output("output_max: float")
+    .Attr("Tinput: quantizedtype")
+    .SetShapeFn([](InferenceContext* c) {
+      ShapeHandle unused;
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(1), 0, &unused));
+      TF_RETURN_IF_ERROR(c->WithRank(c->input(2), 0, &unused));
+      c->set_output(0, c->Scalar());
+      c->set_output(1, c->Scalar());
+      return Status::OK();
+    })
+    .Doc(R"doc(
+Given a quantized tensor described by (input, input_min, input_max), outputs a
+range that covers the actual values present in that tensor.  This op is
+typically used to produce the requested_output_min and requested_output_max for
+Requantize.
+
+input_min: The float value that the minimum quantized input value represents.
+input_max: The float value that the maximum quantized input value represents.
+Tinput: The type of the input.
+output_min: The computed min output.
+output_max: the computed max output.
 
 )doc");
 

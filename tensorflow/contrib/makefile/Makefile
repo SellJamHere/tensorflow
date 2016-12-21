@@ -138,7 +138,7 @@ $(shell mkdir -p $(DEPDIR) >/dev/null)
 # Settings for the target compiler.
 CXX := $(CC_PREFIX) gcc
 OPTFLAGS := -O2
-CXXFLAGS := --std=c++11 -DIS_SLIM_BUILD -fno-exceptions -DNDEBUG $(OPTFLAGS)
+CXXFLAGS := --std=c++11 -DIS_SLIM_BUILD -fno-exceptions -DNDEBUG -DNOTFDBG $(OPTFLAGS)
 LDFLAGS := \
 -L/usr/local/lib
 DEPFLAGS = -MT $@ -MMD -MP -MF $(DEPDIR)/$*.Td
@@ -298,7 +298,6 @@ ifeq ($(TARGET),IOS)
 		-mno-thumb \
 		-DTF_LEAN_BINARY \
 		-D__ANDROID_TYPES_SLIM__ \
-		-DMIN_LOG_LEVEL=0 \
 		-fno-exceptions \
 		-isysroot \
 		${IPHONEOS_SYSROOT}
@@ -321,7 +320,6 @@ ifeq ($(TARGET),IOS)
 		-mno-thumb \
 		-DTF_LEAN_BINARY \
 		-D__ANDROID_TYPES_SLIM__ \
-		-DMIN_LOG_LEVEL=0 \
 		-fno-exceptions \
 		-isysroot \
 		${IPHONEOS_SYSROOT}
@@ -343,7 +341,6 @@ ifeq ($(TARGET),IOS)
 		-Wno-c++11-narrowing \
 		-DTF_LEAN_BINARY \
 		-D__ANDROID_TYPES_SLIM__ \
-		-DMIN_LOG_LEVEL=0 \
 		-fno-exceptions \
 		-isysroot \
 		${IPHONEOS_SYSROOT}
@@ -365,7 +362,6 @@ ifeq ($(TARGET),IOS)
 		-Wno-c++11-narrowing \
 		-DTF_LEAN_BINARY \
 		-D__ANDROID_TYPES_SLIM__ \
-		-DMIN_LOG_LEVEL=0 \
 		-fno-exceptions \
 		-isysroot \
 		${IPHONESIMULATOR_SYSROOT}
@@ -387,7 +383,6 @@ ifeq ($(TARGET),IOS)
 		-Wno-c++11-narrowing \
 		-DTF_LEAN_BINARY \
 		-D__ANDROID_TYPES_SLIM__ \
-		-DMIN_LOG_LEVEL=0 \
 		-fno-exceptions \
 		-isysroot \
 		${IPHONESIMULATOR_SYSROOT}
@@ -421,7 +416,6 @@ BENCHMARK_NAME := $(BINDIR)benchmark
 CORE_CC_ALL_SRCS := \
 $(wildcard tensorflow/core/*.cc) \
 $(wildcard tensorflow/core/common_runtime/*.cc) \
-$(wildcard tensorflow/core/debug/*.cc) \
 $(wildcard tensorflow/core/framework/*.cc) \
 $(wildcard tensorflow/core/graph/*.cc) \
 $(wildcard tensorflow/core/lib/*/*.cc) \
@@ -442,6 +436,7 @@ $(wildcard tensorflow/core/*/*/*test.cc) \
 $(wildcard tensorflow/core/*/*/*testutil*) \
 $(wildcard tensorflow/core/*/*/*testlib*) \
 $(wildcard tensorflow/core/*/*/*main.cc) \
+$(wildcard tensorflow/core/debug/*.cc) \
 $(wildcard tensorflow/core/graph/dot.*) \
 $(wildcard tensorflow/core/lib/gif/*) \
 $(wildcard tensorflow/core/lib/io/zlib*) \

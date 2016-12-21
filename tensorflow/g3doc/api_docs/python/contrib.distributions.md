@@ -130,7 +130,7 @@ dist.mean().eval()
 ```
 - - -
 
-#### `tf.contrib.distributions.Distribution.__init__(dtype, parameters, is_continuous, is_reparameterized, validate_args, allow_nan_stats, name=None)` {#Distribution.__init__}
+#### `tf.contrib.distributions.Distribution.__init__(dtype, is_continuous, is_reparameterized, validate_args, allow_nan_stats, parameters=None, graph_parents=None, name=None)` {#Distribution.__init__}
 
 Constructs the `Distribution`.
 
@@ -140,7 +140,6 @@ Constructs the `Distribution`.
 
 
 *  <b>`dtype`</b>: The type of the event samples. `None` implies no type-enforcement.
-*  <b>`parameters`</b>: Python dictionary of parameters used by this `Distribution`.
 *  <b>`is_continuous`</b>: Python boolean. If `True` this
     `Distribution` is continuous over its supported domain.
 *  <b>`is_reparameterized`</b>: Python boolean. If `True` this
@@ -154,7 +153,15 @@ Constructs the `Distribution`.
     exception if a statistic (e.g., mean, mode) is undefined for any batch
     member. If True, batch members with valid parameters leading to
     undefined statistics will return `NaN` for this statistic.
-*  <b>`name`</b>: A name for this distribution (optional).
+*  <b>`parameters`</b>: Python dictionary of parameters used to instantiate this
+    `Distribution`.
+*  <b>`graph_parents`</b>: Python list of graph prerequisites of this `Distribution`.
+*  <b>`name`</b>: A name for this distribution. Default: subclass name.
+
+##### Raises:
+
+
+*  <b>`ValueError`</b>: if any member of graph_parents is `None` or not a `Tensor`.
 
 
 - - -
@@ -222,6 +229,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Distribution.copy(**override_parameters_kwargs)` {#Distribution.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -494,7 +524,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Distribution.parameters` {#Distribution.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -835,6 +865,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Binomial.copy(**override_parameters_kwargs)` {#Binomial.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Binomial.dtype` {#Binomial.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -1143,7 +1196,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Binomial.parameters` {#Binomial.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -1437,6 +1490,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Bernoulli.copy(**override_parameters_kwargs)` {#Bernoulli.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Bernoulli.dtype` {#Bernoulli.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -1723,7 +1799,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Bernoulli.parameters` {#Bernoulli.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -1978,6 +2054,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.BernoulliWithSigmoidP.copy(**override_parameters_kwargs)` {#BernoulliWithSigmoidP.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -2268,7 +2367,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.BernoulliWithSigmoidP.parameters` {#BernoulliWithSigmoidP.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -2637,6 +2736,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Beta.copy(**override_parameters_kwargs)` {#Beta.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Beta.dtype` {#Beta.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -2920,7 +3042,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Beta.parameters` {#Beta.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -3197,6 +3319,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.BetaWithSoftplusAB.copy(**override_parameters_kwargs)` {#BetaWithSoftplusAB.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -3484,7 +3629,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.BetaWithSoftplusAB.parameters` {#BetaWithSoftplusAB.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -3804,6 +3949,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Categorical.copy(**override_parameters_kwargs)` {#Categorical.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Categorical.dtype` {#Categorical.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -4095,7 +4263,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Categorical.parameters` {#Categorical.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -4379,6 +4547,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Chi2.copy(**override_parameters_kwargs)` {#Chi2.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -4675,7 +4866,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Chi2.parameters` {#Chi2.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -4942,6 +5133,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Chi2WithAbsDf.copy(**override_parameters_kwargs)` {#Chi2WithAbsDf.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -5238,7 +5452,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Chi2WithAbsDf.parameters` {#Chi2WithAbsDf.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -5527,6 +5741,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Exponential.copy(**override_parameters_kwargs)` {#Exponential.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -5823,7 +6060,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Exponential.parameters` {#Exponential.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -6090,6 +6327,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.ExponentialWithSoftplusLam.copy(**override_parameters_kwargs)` {#ExponentialWithSoftplusLam.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -6386,7 +6646,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.ExponentialWithSoftplusLam.parameters` {#ExponentialWithSoftplusLam.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -6706,6 +6966,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Gamma.copy(**override_parameters_kwargs)` {#Gamma.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Gamma.dtype` {#Gamma.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -6991,7 +7274,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Gamma.parameters` {#Gamma.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -7258,6 +7541,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.GammaWithSoftplusAlphaBeta.copy(**override_parameters_kwargs)` {#GammaWithSoftplusAlphaBeta.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -7547,7 +7853,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.GammaWithSoftplusAlphaBeta.parameters` {#GammaWithSoftplusAlphaBeta.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -7863,6 +8169,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.InverseGamma.copy(**override_parameters_kwargs)` {#InverseGamma.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.InverseGamma.dtype` {#InverseGamma.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -8152,7 +8481,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.InverseGamma.parameters` {#InverseGamma.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -8425,6 +8754,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.InverseGammaWithSoftplusAlphaBeta.copy(**override_parameters_kwargs)` {#InverseGammaWithSoftplusAlphaBeta.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -8718,7 +9070,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.InverseGammaWithSoftplusAlphaBeta.parameters` {#InverseGammaWithSoftplusAlphaBeta.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -9014,6 +9366,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Laplace.copy(**override_parameters_kwargs)` {#Laplace.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Laplace.dtype` {#Laplace.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -9289,7 +9664,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Laplace.parameters` {#Laplace.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -9544,6 +9919,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.LaplaceWithSoftplusScale.copy(**override_parameters_kwargs)` {#LaplaceWithSoftplusScale.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -9823,7 +10221,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.LaplaceWithSoftplusScale.parameters` {#LaplaceWithSoftplusScale.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -10146,6 +10544,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Normal.copy(**override_parameters_kwargs)` {#Normal.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Normal.dtype` {#Normal.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -10421,7 +10842,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Normal.parameters` {#Normal.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -10676,6 +11097,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.NormalWithSoftplusSigma.copy(**override_parameters_kwargs)` {#NormalWithSoftplusSigma.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -10955,7 +11399,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.NormalWithSoftplusSigma.parameters` {#NormalWithSoftplusSigma.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -11234,6 +11678,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Poisson.copy(**override_parameters_kwargs)` {#Poisson.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -11526,7 +11993,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Poisson.parameters` {#Poisson.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -11857,6 +12324,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.StudentT.copy(**override_parameters_kwargs)` {#StudentT.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.StudentT.df` {#StudentT.df}
 
 Degrees of freedom in these Student's t distribution(s).
@@ -12145,7 +12635,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.StudentT.parameters` {#StudentT.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -12410,6 +12900,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.StudentTWithAbsDfSoftplusSigma.copy(**override_parameters_kwargs)` {#StudentTWithAbsDfSoftplusSigma.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -12702,7 +13215,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.StudentTWithAbsDfSoftplusSigma.parameters` {#StudentTWithAbsDfSoftplusSigma.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -13027,6 +13540,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Uniform.copy(**override_parameters_kwargs)` {#Uniform.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Uniform.dtype` {#Uniform.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -13295,7 +13831,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Uniform.parameters` {#Uniform.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -13628,6 +14164,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.MultivariateNormalDiag.copy(**override_parameters_kwargs)` {#MultivariateNormalDiag.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.MultivariateNormalDiag.dtype` {#MultivariateNormalDiag.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -13926,7 +14485,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.MultivariateNormalDiag.parameters` {#MultivariateNormalDiag.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -14269,6 +14828,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.MultivariateNormalFull.copy(**override_parameters_kwargs)` {#MultivariateNormalFull.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.MultivariateNormalFull.dtype` {#MultivariateNormalFull.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -14567,7 +15149,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.MultivariateNormalFull.parameters` {#MultivariateNormalFull.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -14919,6 +15501,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.MultivariateNormalCholesky.copy(**override_parameters_kwargs)` {#MultivariateNormalCholesky.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.MultivariateNormalCholesky.dtype` {#MultivariateNormalCholesky.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -15217,7 +15822,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.MultivariateNormalCholesky.parameters` {#MultivariateNormalCholesky.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -15595,6 +16200,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.MultivariateNormalDiagPlusVDVT.copy(**override_parameters_kwargs)` {#MultivariateNormalDiagPlusVDVT.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.MultivariateNormalDiagPlusVDVT.dtype` {#MultivariateNormalDiagPlusVDVT.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -15893,7 +16521,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.MultivariateNormalDiagPlusVDVT.parameters` {#MultivariateNormalDiagPlusVDVT.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -16171,6 +16799,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.MultivariateNormalDiagWithSoftplusStDev.copy(**override_parameters_kwargs)` {#MultivariateNormalDiagWithSoftplusStDev.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -16473,7 +17124,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.MultivariateNormalDiagWithSoftplusStDev.parameters` {#MultivariateNormalDiagWithSoftplusStDev.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -16674,62 +17325,6 @@ Variance.
 
 
 
-- - -
-
-### `tf.contrib.distributions.matrix_diag_transform(matrix, transform=None, name=None)` {#matrix_diag_transform}
-
-Transform diagonal of [batch-]matrix, leave rest of matrix unchanged.
-
-Create a trainable covariance defined by a Cholesky factor:
-
-```python
-# Transform network layer into 2 x 2 array.
-matrix_values = tf.contrib.layers.fully_connected(activations, 4)
-matrix = tf.reshape(matrix_values, (batch_size, 2, 2))
-
-# Make the diagonal positive.  If the upper triangle was zero, this would be a
-# valid Cholesky factor.
-chol = matrix_diag_transform(matrix, transform=tf.nn.softplus)
-
-# OperatorPDCholesky ignores the upper triangle.
-operator = OperatorPDCholesky(chol)
-```
-
-Example of heteroskedastic 2-D linear regression.
-
-```python
-# Get a trainable Cholesky factor.
-matrix_values = tf.contrib.layers.fully_connected(activations, 4)
-matrix = tf.reshape(matrix_values, (batch_size, 2, 2))
-chol = matrix_diag_transform(matrix, transform=tf.nn.softplus)
-
-# Get a trainable mean.
-mu = tf.contrib.layers.fully_connected(activations, 2)
-
-# This is a fully trainable multivariate normal!
-dist = tf.contrib.distributions.MVNCholesky(mu, chol)
-
-# Standard log loss.  Minimizing this will "train" mu and chol, and then dist
-# will be a distribution predicting labels as multivariate Gaussians.
-loss = -1 * tf.reduce_mean(dist.log_pdf(labels))
-```
-
-##### Args:
-
-
-*  <b>`matrix`</b>: Rank `R` `Tensor`, `R >= 2`, where the last two dimensions are
-    equal.
-*  <b>`transform`</b>: Element-wise function mapping `Tensors` to `Tensors`.  To
-    be applied to the diagonal of `matrix`.  If `None`, `matrix` is returned
-    unchanged.  Defaults to `None`.
-*  <b>`name`</b>: A name to give created ops.
-    Defaults to "matrix_diag_transform".
-
-##### Returns:
-
-  A `Tensor` with same shape and `dtype` as `matrix`.
-
-
 
 ### Other multivariate distributions
 
@@ -16911,6 +17506,29 @@ cdf(x) := P[X <= x]
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.Dirichlet.copy(**override_parameters_kwargs)` {#Dirichlet.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -17198,7 +17816,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Dirichlet.parameters` {#Dirichlet.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -17571,6 +18189,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.DirichletMultinomial.copy(**override_parameters_kwargs)` {#DirichletMultinomial.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.DirichletMultinomial.dtype` {#DirichletMultinomial.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -17861,7 +18502,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.DirichletMultinomial.parameters` {#DirichletMultinomial.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -18242,6 +18883,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Multinomial.copy(**override_parameters_kwargs)` {#Multinomial.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Multinomial.dtype` {#Multinomial.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -18548,7 +19212,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Multinomial.parameters` {#Multinomial.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -18901,6 +19565,29 @@ Boolean indicating if `Tensor` input/outputs are Cholesky factorized.
 
 - - -
 
+#### `tf.contrib.distributions.WishartCholesky.copy(**override_parameters_kwargs)` {#WishartCholesky.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.WishartCholesky.df` {#WishartCholesky.df}
 
 Wishart distribution degree(s) of freedom.
@@ -19197,7 +19884,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.WishartCholesky.parameters` {#WishartCholesky.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -19545,6 +20232,29 @@ Boolean indicating if `Tensor` input/outputs are Cholesky factorized.
 
 - - -
 
+#### `tf.contrib.distributions.WishartFull.copy(**override_parameters_kwargs)` {#WishartFull.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.WishartFull.df` {#WishartFull.df}
 
 Wishart distribution degree(s) of freedom.
@@ -19841,7 +20551,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.WishartFull.parameters` {#WishartFull.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -20027,6 +20737,65 @@ Variance.
 
 
 
+### Multivariate Utilities
+
+- - -
+
+### `tf.contrib.distributions.matrix_diag_transform(matrix, transform=None, name=None)` {#matrix_diag_transform}
+
+Transform diagonal of [batch-]matrix, leave rest of matrix unchanged.
+
+Create a trainable covariance defined by a Cholesky factor:
+
+```python
+# Transform network layer into 2 x 2 array.
+matrix_values = tf.contrib.layers.fully_connected(activations, 4)
+matrix = tf.reshape(matrix_values, (batch_size, 2, 2))
+
+# Make the diagonal positive.  If the upper triangle was zero, this would be a
+# valid Cholesky factor.
+chol = matrix_diag_transform(matrix, transform=tf.nn.softplus)
+
+# OperatorPDCholesky ignores the upper triangle.
+operator = OperatorPDCholesky(chol)
+```
+
+Example of heteroskedastic 2-D linear regression.
+
+```python
+# Get a trainable Cholesky factor.
+matrix_values = tf.contrib.layers.fully_connected(activations, 4)
+matrix = tf.reshape(matrix_values, (batch_size, 2, 2))
+chol = matrix_diag_transform(matrix, transform=tf.nn.softplus)
+
+# Get a trainable mean.
+mu = tf.contrib.layers.fully_connected(activations, 2)
+
+# This is a fully trainable multivariate normal!
+dist = tf.contrib.distributions.MVNCholesky(mu, chol)
+
+# Standard log loss.  Minimizing this will "train" mu and chol, and then dist
+# will be a distribution predicting labels as multivariate Gaussians.
+loss = -1 * tf.reduce_mean(dist.log_pdf(labels))
+```
+
+##### Args:
+
+
+*  <b>`matrix`</b>: Rank `R` `Tensor`, `R >= 2`, where the last two dimensions are
+    equal.
+*  <b>`transform`</b>: Element-wise function mapping `Tensors` to `Tensors`.  To
+    be applied to the diagonal of `matrix`.  If `None`, `matrix` is returned
+    unchanged.  Defaults to `None`.
+*  <b>`name`</b>: A name to give created ops.
+    Defaults to "matrix_diag_transform".
+
+##### Returns:
+
+  A `Tensor` with same shape and `dtype` as `matrix`.
+
+
+
 ## Transformed distributions
 
 - - -
@@ -20137,7 +20906,7 @@ normal = ds.TransformedDistribution(
 ```
 - - -
 
-#### `tf.contrib.distributions.TransformedDistribution.__init__(distribution, bijector, name=None)` {#TransformedDistribution.__init__}
+#### `tf.contrib.distributions.TransformedDistribution.__init__(distribution, bijector, validate_args=False, name=None)` {#TransformedDistribution.__init__}
 
 Construct a Transformed Distribution.
 
@@ -20148,6 +20917,9 @@ Construct a Transformed Distribution.
     instance of `Distribution`.
 *  <b>`bijector`</b>: The object responsible for calculating the transformation.
     Typically an instance of `Bijector`.
+*  <b>`validate_args`</b>: Python boolean.  Whether to validate input with asserts.
+    If `validate_args` is `False`, and the inputs are invalid,
+    correct behavior is not guaranteed.
 *  <b>`name`</b>: The name for the distribution. Default:
     `bijector.name + distribution.name`.
 
@@ -20232,6 +21004,29 @@ Additional documentation from `TransformedDistribution`:
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.TransformedDistribution.copy(**override_parameters_kwargs)` {#TransformedDistribution.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -20541,7 +21336,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.TransformedDistribution.parameters` {#TransformedDistribution.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -20801,13 +21596,13 @@ entropy are better done with samples or approximations, and are not
 implemented by this class.
 - - -
 
-#### `tf.contrib.distributions.QuantizedDistribution.__init__(distribution, lower_cutoff=None, upper_cutoff=None, name='QuantizedDistribution')` {#QuantizedDistribution.__init__}
+#### `tf.contrib.distributions.QuantizedDistribution.__init__(distribution, lower_cutoff=None, upper_cutoff=None, validate_args=False, name='QuantizedDistribution')` {#QuantizedDistribution.__init__}
 
 Construct a Quantized Distribution representing `Y = ceiling(X)`.
 
-Some properties are inherited from the distribution defining `X`.
-In particular, `validate_args` and `allow_nan_stats` are determined for this
-`QuantizedDistribution` by reading the `distribution`.
+Some properties are inherited from the distribution defining `X`. Example:
+`allow_nan_stats` is determined for this `QuantizedDistribution` by reading
+the `distribution`.
 
 ##### Args:
 
@@ -20823,6 +21618,9 @@ In particular, `validate_args` and `allow_nan_stats` are determined for this
     If provided, base distribution's pdf/pmf should be defined at
     `upper_cutoff - 1`.
     `upper_cutoff` must be strictly greater than `lower_cutoff`.
+*  <b>`validate_args`</b>: Python boolean.  Whether to validate input with asserts.
+    If `validate_args` is `False`, and the inputs are invalid,
+    correct behavior is not guaranteed.
 *  <b>`name`</b>: The name for the distribution.
 
 ##### Raises:
@@ -20916,6 +21714,29 @@ The base distribution's `cdf` method must be defined on `y - 1`.
 
 *  <b>`cdf`</b>: a `Tensor` of shape `sample_shape(x) + self.batch_shape` with
     values of type `self.dtype`.
+
+
+- - -
+
+#### `tf.contrib.distributions.QuantizedDistribution.copy(**override_parameters_kwargs)` {#QuantizedDistribution.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
 
 
 - - -
@@ -21249,7 +22070,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.QuantizedDistribution.parameters` {#QuantizedDistribution.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -21601,6 +22422,29 @@ cdf(x) := P[X <= x]
 
 - - -
 
+#### `tf.contrib.distributions.Mixture.copy(**override_parameters_kwargs)` {#Mixture.copy}
+
+Creates a deep copy of the distribution.
+
+Note: the copy distribution may continue to depend on the original
+intialization arguments.
+
+##### Args:
+
+
+*  <b>`**override_parameters_kwargs`</b>: String/value dictionary of initialization
+    arguments to override with new values.
+
+##### Returns:
+
+
+*  <b>`distribution`</b>: A new instance of `type(self)` intitialized from the union
+    of self.parameters and override_parameters_kwargs, i.e.,
+    `dict(self.parameters, **override_parameters_kwargs)`.
+
+
+- - -
+
 #### `tf.contrib.distributions.Mixture.dtype` {#Mixture.dtype}
 
 The `DType` of `Tensor`s handled by this `Distribution`.
@@ -21922,7 +22766,7 @@ param_shapes with static (i.e. TensorShape) shapes.
 
 #### `tf.contrib.distributions.Mixture.parameters` {#Mixture.parameters}
 
-Dictionary of parameters used by this `Distribution`.
+Dictionary of parameters used to instantiate this `Distribution`.
 
 
 - - -
@@ -22211,13 +23055,26 @@ will broadcast in the case of multidimensional sets of parameters.
 
 
 
-## Kullback Leibler Divergence
+## Kullback-Leibler Divergence
 
 - - -
 
 ### `tf.contrib.distributions.kl(dist_a, dist_b, allow_nan=False, name=None)` {#kl}
 
 Get the KL-divergence KL(dist_a || dist_b).
+
+If there is no KL method registered specifically for `type(dist_a)` and
+`type(dist_b)`, then the class hierarchies of these types are searched.
+
+If one KL method is registered between any pairs of classes in these two
+parent hierarchies, it is used.
+
+If more than one such registered method exists, the method whose registered
+classes have the shortest sum MRO paths to the input types is used.
+
+If more than one such shortest path exists, the first method
+identified in the search is used (favoring a shorter MRO distance to
+`type(dist_a)`).
 
 ##### Args:
 
